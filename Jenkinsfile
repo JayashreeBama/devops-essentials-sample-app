@@ -10,9 +10,7 @@ pipeline {
         }
 
         stage('DeployToStage') {
-            when {
-                branch 'master'
-            }
+            
             steps {
                 withCredentials([string(credentialsId: 'cloud_user_pw', variable: 'USERPASS')]) {
                     sshPublisher(
@@ -38,9 +36,7 @@ pipeline {
         }
 
         stage('DeployToProd') {
-            when {
-                branch 'master'
-            }
+            
             steps {
                 input 'Does the staging environment look OK?'
                 milestone(1)
