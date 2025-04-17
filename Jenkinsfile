@@ -4,10 +4,11 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Running build automation'
-                sh './gradlew build'
-                archiveArtifacts artifacts: 'src/index.html'
+                bat 'gradlew.bat build' // Windows equivalent of './gradlew build'
+                archiveArtifacts artifacts: 'src\\index.html' // Windows path
             }
         }
+
         stage('DeployToStage') {
             when {
                 branch 'master'
@@ -25,8 +26,8 @@ pipeline {
                                 ], 
                                 transfers: [
                                     sshTransfer(
-                                        sourceFiles: 'src/**',
-                                        removePrefix: 'src/'
+                                        sourceFiles: 'src\\**', // Windows-style path
+                                        removePrefix: 'src\\'
                                     )
                                 ]
                             )
@@ -35,6 +36,7 @@ pipeline {
                 }
             }
         }
+
         stage('DeployToProd') {
             when {
                 branch 'master'
@@ -54,8 +56,8 @@ pipeline {
                                 ], 
                                 transfers: [
                                     sshTransfer(
-                                        sourceFiles: 'src/**',
-                                        removePrefix: 'src/'
+                                        sourceFiles: 'src\\**',
+                                        removePrefix: 'src\\'
                                     )
                                 ]
                             )
